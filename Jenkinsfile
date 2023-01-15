@@ -12,8 +12,7 @@ pipeline {
     
       stage("Build image") {
             steps {
-                script {
-                    myapp = docker.build("febfun/hellowhale:${env.BUILD_ID}")
+                    sh 'docker build -t febfun/hellowhale:1.0 .'
                 }
             }
         }
