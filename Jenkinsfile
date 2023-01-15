@@ -6,7 +6,7 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        git url:'https://github.com/vamsijakkula/hellowhale.git', branch:'main'
+        git url:'https://github.com/febfun1/jenkins-k8.git', branch:'main'
       }
     }
     
