@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/adeoyedewale/Backend.git'
+                git url: 'https://github.com/febfun1/jenkins-k8.git'
             }
         }
         stage('Build') {
