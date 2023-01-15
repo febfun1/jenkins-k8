@@ -19,7 +19,7 @@ pipeline{
 		stage('Build') {
 			steps {
 			
-			   sh 'docker build -t febfun/class_app:${BUILD_NUMBER} .'
+			   sh 'docker build -t febfun/class_app1:${BUILD_NUMBER} .'
 			}
 		}
 		
@@ -33,7 +33,7 @@ pipeline{
 		stage('Push') {
 			
 			steps {
-			   sh 'docker push febfun/class_app:${BUILD_NUMBER}'
+			   sh 'docker push febfun/class_app1:${BUILD_NUMBER}'
 			}
 		}
 		}
