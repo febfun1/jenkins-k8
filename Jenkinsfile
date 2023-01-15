@@ -11,7 +11,7 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        git 'https://github.com/febfun1/Jenkins-integration-with-kubernetes.git'
+        git 'https://github.com/febfun1/jenkins-k8.git'
       }
     }
 
