@@ -20,7 +20,7 @@ pipeline {
 	    
         stage('Dockerize') {
             steps {
-                sh "docker build -t febfun/mybackend-nodejs-app:${BUILD_NUMBER} ."
+                sh "docker build -t febfun/nodejs-app:${BUILD_NUMBER} ."
             }
         }
         stage('Publish') {
@@ -38,7 +38,7 @@ pipeline {
         //stage('Push') {
 
              // steps {
-                 //sh 'docker push febfun/backend-app:${BUILD_NUMBER}'
+                 //sh 'docker push febfun/nodejs-app:${BUILD_NUMBER}'
              // }
        // }
 		}
