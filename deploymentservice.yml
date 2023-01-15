@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: nodeserver
-        image: febfun/class_app1:latest
+        image: febfun/nodejs-app:latest
         ports:
         - containerPort: 3000
         
