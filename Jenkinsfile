@@ -1,36 +1,52 @@
-pipeline {
+pipeline{
 
-  agent any
+   agent any
 
-  stages {
+	//create dockerhub credential in github with your dockerhub Username and Password/Token
+	environment {
+		DOCKERHUB_CREDENTIALS=credentials('dockerhub')
+	}
+	
+	stages {
 
-    stage('Checkout Source') {
-      steps {
-        git url:'https://github.com/febfun1/jenkins-k8.git', branch:'main'
-      }
+		stage('gitclone') {
+
+		      steps {
+		         git 'https://github.com/febfun1/Jeff.git'
+		      }
+		}
+		
+		stage('Build') {
+			steps {
+			
+			   sh 'docker build -t febfun/class_app1:${BUILD_NUMBER} .'
+			}
+		}
+		
+		stage('Login') {
+		
+			steps {
+			   sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login --username febfun --password-stdin'    
+			}
+		}
+
+		stage('Push') {
+			
+			steps {
+			   sh 'docker push febfun/class_app1:${BUILD_NUMBER}'
+			}
+		}
+		}
+	
+	post {
+	    always {
+		sh 'docker logout'
+	    }
     }
-    
-      stage("Build image") {
-            steps {
-                script {
-                    myapp = docker.build("febfun/hellowhale:${env.BUILD_ID}")
-                }
-            }
-        }
-    
-      stage("Push image") {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                            myapp.push("latest")
-                            myapp.push("${env.BUILD_ID}")
-                    }
-                }
-            }
-        }
 
-    
-    stage('Deploy App') {
+}
+
+stage('Deploy App') {
       steps {
         script {
           kubernetesDeploy(configs: "hellowhale.yml", kubeconfigId: "kubernetes")
