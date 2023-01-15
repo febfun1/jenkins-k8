@@ -1,56 +1,34 @@
 pipeline {
-    agent any
-  
-     //create dockerhub credential in github with your dockerhub Username and Password/Token
-    environment {
-      DOCKERHUB_CREDENTIALS=credentials('dockerhub')
+
+  agent any
+
+  stages {
+
+    stage('Checkout Source') {
+      steps {
+        git url:'https://github.com/febfun1/jenkins-k8.git', branch:'main'
+      }
     }
-    stages {
-        stage('Checkout') {
+    
+      stage("Build image") {
             steps {
-                git url: 'https://github.com/febfun1/jenkins-k8.git'
+                script {
+                    myapp = docker.build("febfun/hellowhale:${env.BUILD_ID}")
+                }
             }
         }
-        stage('Build') {
+    
+      stage("Push image") {
             steps {
-                sh 'npm install'
-                //sh 'npm run build'
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                            myapp.push("latest")
+                            myapp.push("${env.BUILD_ID}")
+                    }
+                }
             }
         }
-	    
-        stage('Dockerize') {
-            steps {
-                sh "docker build -t febfun/nodejs-app:${BUILD_NUMBER} ."
-            }
-        }
-        stage('Publish') {
-            steps {
-                //sh "docker login -u febfun -p America123"
-		sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login --username febfun --password-stdin'
-            }
-        //stage('Login') {
-		
-              //steps {
-              //   sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login --username febfun --password-stdin'    
-             // }
-		   // }
 
-        //stage('Push') {
-
-             // steps {
-                 //sh 'docker push febfun/nodejs-app:${BUILD_NUMBER}'
-             // }
-       // }
-		}
-	}
-	
-    post {
-        always {
-	cleanWs()
-      	sh 'docker logout'
-        }
-   }
-}
     
     stage('Deploy App') {
       steps {
