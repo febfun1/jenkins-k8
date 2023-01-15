@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: nodeserver
-        image: febfun/hellowhale:latest
+        image: febfun/class_app1:latest
         ports:
         - containerPort: 3000
         
